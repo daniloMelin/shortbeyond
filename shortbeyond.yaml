@@ -1,0 +1,45 @@
+# Feito com Muito S2 e Muito Café :)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shortbeyond
+  labels:
+    app: shortbeyond
+spec:
+  containers:
+    - name: shortb-db
+      image: docker.io/library/postgres:15
+      ports:
+        - containerPort: 5432
+          hostPort: 5432
+      env:
+        - name: POSTGRES_USER
+          value: "dba"
+        - name: POSTGRES_PASSWORD
+          value: "dba"
+        - name: POSTGRES_DB
+          value: "ShortDB"
+        - name: TZ
+          value: "America/Sao_Paulo"
+    - name: shortb-adminer
+      image: docker.io/library/adminer
+      ports:
+        - containerPort: 8080
+          hostPort: 8080
+    - name: shortb-api
+      image: docker.io/beyondtest/shortb-api:beta
+      ports:
+        - containerPort: 3333
+          hostPort: 3333
+      env:
+        - name: PORT
+          value: "3333"
+        - name: DATABASE_URL
+          value: "postgres://dba:dba@localhost:5432/ShortDB?sslmode=disable"
+        - name: JWT_SECRET
+          value: "vaiplaneta"
+    - name: shortb-web
+      image: docker.io/beyondtest/shortb-web:latest
+      ports:
+        - containerPort: 80
+          hostPort: 3000

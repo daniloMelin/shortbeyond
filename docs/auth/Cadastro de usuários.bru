@@ -1,0 +1,23 @@
+meta {
+  name: Cadastro de usuários
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3333/api/auth/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Danilo Melin",
+    "email": "danilo@email.com",
+    "password": "Senha123"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
