@@ -12,7 +12,7 @@ test.describe('POST /auth/register', () => {
         auth = authService(request);
     });
 
-    test('Deve cadastrar um novo usuário com sucesso quando os dados são válidos', async () => {
+    test('deve cadastrar um novo usuário com sucesso quando os dados são válidos', async () => {
         const user = getUser();
 
         const response = await auth.createUser(user);
@@ -27,7 +27,7 @@ test.describe('POST /auth/register', () => {
         expect(body.user).not.toHaveProperty('password');
     });
 
-    test('Deve retornar erro 400 quando o email já está em uso', async () => {
+    test('deve retornar erro 400 quando o email já está em uso', async () => {
         const user = getUser();
 
         const preCondition = await auth.createUser(user);
@@ -40,7 +40,7 @@ test.describe('POST /auth/register', () => {
         expect(body).toHaveProperty('message', 'Este e-mail já está em uso. Por favor, tente outro.');
     });
 
-    test('Deve retornar erro 400 quando o email é inválido', async () => {
+    test('deve retornar erro 400 quando o email é inválido', async () => {
         const user = {
             name: 'Danilo Costa',
             email: 'costa&gmail.com',
@@ -54,7 +54,7 @@ test.describe('POST /auth/register', () => {
         expect(body).toHaveProperty('message', 'O campo \'Email\' deve ser um email válido');
     });
 
-    test('Deve retornar erro 400 quando o nome não é informado', async () => {
+    test('deve retornar erro 400 quando o nome não é informado', async () => {
         const user = {
             email: 'costa@gmail.com',
             password: 'Senha123',
@@ -67,7 +67,7 @@ test.describe('POST /auth/register', () => {
         expect(body).toHaveProperty('message', 'O campo \'Name\' é obrigatório');
     });
 
-    test('Deve retornar erro 400 quando o email não é informado', async () => {
+    test('deve retornar erro 400 quando o email não é informado', async () => {
         const user = {
             name: 'Danilo Costa',
             password: 'Senha123',
@@ -80,7 +80,7 @@ test.describe('POST /auth/register', () => {
         expect(body).toHaveProperty('message', 'O campo \'Email\' é obrigatório');
     });
 
-    test('Deve retornar erro 400 quando a senha não é informada', async () => {
+    test('deve retornar erro 400 quando a senha não é informada', async () => {
         const user = {
             name: 'Danilo Costa',
             email: 'costa@gmail.com',

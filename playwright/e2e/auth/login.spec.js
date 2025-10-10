@@ -13,7 +13,7 @@ test.describe('POST /auth/login', () => {
         auth = authService(request);
     });
 
-    test('Deve realizar o login com sucesso quando as credenciais são válidas', async () => {
+    test('deve realizar o login com sucesso quando as credenciais são válidas', async () => {
         const user = getUser();
 
         const respCreate = await auth.createUser(user);
@@ -32,7 +32,7 @@ test.describe('POST /auth/login', () => {
         expect(body.data.user).not.toHaveProperty('password');
     });
 
-    test('Deve retornar erro 401 quando a senha é inválida', async () => {
+    test('deve retornar erro 401 quando a senha é inválida', async () => {
         const user = getUser();
 
         const respCreate = await auth.createUser(user);
@@ -47,7 +47,7 @@ test.describe('POST /auth/login', () => {
         expect(body).toHaveProperty('message', 'Credenciais inválidas');
     });
 
-    test('Deve retornar erro 401 quando o email não esta cadastrado', async () => {
+    test('deve retornar erro 401 quando o email não esta cadastrado', async () => {
         const user = getUser();
 
         user.email = 'emailerrado@example.com';
@@ -59,7 +59,7 @@ test.describe('POST /auth/login', () => {
         expect(body).toHaveProperty('message', 'Credenciais inválidas');
     });
 
-    test('Deve retornar erro 400 quando o email não é informado', async () => {
+    test('deve retornar erro 400 quando o email não é informado', async () => {
         const user = {
             password: 'senha123'
         };
@@ -71,7 +71,7 @@ test.describe('POST /auth/login', () => {
         expect(body).toHaveProperty('message', 'O campo \'Email\' é obrigatório');
     });
 
-    test('Deve retornar erro 400 quando a senha não é informada', async () => {
+    test('deve retornar erro 400 quando a senha não é informada', async () => {
         const user = {
             email: 'email@example.com'
         };

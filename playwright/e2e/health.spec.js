@@ -1,7 +1,7 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
 
-test('Deve retornar status 200 e informações da API quando está online', async ({ request }) => {
+test('deve retornar status 200 e informações da API quando está online', async ({ request }) => {
   const response = await request.get('http://localhost:3000/health');
   expect(response.status()).toBe(200);
 
