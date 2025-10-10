@@ -1,0 +1,26 @@
+meta {
+  name: Criar novo Link
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3333/api/links
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDFLNzM5SDZQRTIySlRINkJITVhDTTVOVzgiLCJleHAiOjE3NjAyMDA1MTcsImlhdCI6MTc2MDExNDExN30.CpGXcUbfgTvWdzfpUQZOS8Ite6axE7AfauQfJy7_3w8
+}
+
+body:json {
+  {
+    "original_url": "https://www.mercadolivre.com.br/",
+    "title": "Mercado Livre"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
