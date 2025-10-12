@@ -1,19 +1,11 @@
-import { test, expect } from '@playwright/test';
-
-import { authService } from '../../support/services/auth.js';
+import { test, expect } from '../../support/fixtures';
 
 import { getUser } from '../../support/factories/user';
 
 
 test.describe('POST /auth/login', () => {
 
-    let auth;
-
-    test.beforeEach(({ request }) => {
-        auth = authService(request);
-    });
-
-    test('deve realizar o login com sucesso quando as credenciais são válidas', async () => {
+    test('deve realizar o login com sucesso quando as credenciais são válidas', async ( { auth }) => {
         const user = getUser();
 
         const respCreate = await auth.createUser(user);
@@ -32,7 +24,7 @@ test.describe('POST /auth/login', () => {
         expect(body.data.user).not.toHaveProperty('password');
     });
 
-    test('deve retornar erro 401 quando a senha é inválida', async () => {
+    test('deve retornar erro 401 quando a senha é inválida', async ( { auth }) => {
         const user = getUser();
 
         const respCreate = await auth.createUser(user);
@@ -47,7 +39,7 @@ test.describe('POST /auth/login', () => {
         expect(body).toHaveProperty('message', 'Credenciais inválidas');
     });
 
-    test('deve retornar erro 401 quando o email não esta cadastrado', async () => {
+    test('deve retornar erro 401 quando o email não esta cadastrado', async ( { auth }) => {
         const user = getUser();
 
         user.email = 'emailerrado@example.com';
@@ -59,7 +51,7 @@ test.describe('POST /auth/login', () => {
         expect(body).toHaveProperty('message', 'Credenciais inválidas');
     });
 
-    test('deve retornar erro 400 quando o email não é informado', async () => {
+    test('deve retornar erro 400 quando o email não é informado', async ( { auth }) => {
         const user = {
             password: 'senha123'
         };
@@ -71,7 +63,7 @@ test.describe('POST /auth/login', () => {
         expect(body).toHaveProperty('message', 'O campo \'Email\' é obrigatório');
     });
 
-    test('deve retornar erro 400 quando a senha não é informada', async () => {
+    test('deve retornar erro 400 quando a senha não é informada', async ( { auth }) => {
         const user = {
             email: 'email@example.com'
         };
