@@ -1,0 +1,26 @@
+meta {
+  name: Remove Link Encurtado
+  type: http
+  seq: 3
+}
+
+delete {
+  url: http://localhost:3333/api/links/01K7JJGF103H8DJHF8C4909VZX
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDFLN0ZDM1RWOEJKTkhXWUI1U1laQUhLQ0IiLCJleHAiOjE3NjA1NzI2MDAsImlhdCI6MTc2MDQ4NjIwMH0.gbr-VgEhqa3M7MnE5XyEr0H8CdgU7mPEGsJx6FmU21E
+}
+
+body:json {
+  {
+    "original_url": "https://www.mercadolivre.com.br/",
+    "title": "Mercado Livre"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

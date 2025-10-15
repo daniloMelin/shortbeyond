@@ -8,7 +8,14 @@ export const linksService = (request) => {
             data: link
         });
     }
-    
+
+    const createAndReturnLinkId = async (link, token) => {
+        const response = await createLink(link, token);
+        const body = await response.json();
+        return body.data.id;
+    }
+
+
     const getLinks = async (token) => {
         return await request.get('http://localhost:3333/api/links', {
             headers: {
@@ -28,6 +35,7 @@ export const linksService = (request) => {
     return {
         createLink,
         getLinks,
-        deleteLinks
+        deleteLinks,
+        createAndReturnLinkId
     }
 }

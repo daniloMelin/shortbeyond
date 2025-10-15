@@ -4,7 +4,6 @@ import { getUserWithLink } from '../../support/factories/user.js';
 
 
 test.describe('Post /api/links', () => {
-
     const user =  getUserWithLink();
  
     let token;
