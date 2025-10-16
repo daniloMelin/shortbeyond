@@ -1,8 +1,45 @@
-# Playwright
+# Node
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-/bruno/tmp/
+
+# Playwright reports / resultados de teste
+playwright-report/
+test-results/
+
+# Build / caches / outputs
+dist/
+build/
+.cache/
+coverage/
+.nyc_output/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Environment files (contendo segredos)
+.env
+.env.local
+.env.*.local
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Bruno/tooling temp (se existir)
+.bruno/
+
+# Postgres data / volumes locais (se usar)
+pgdata/
+
+# Kubernetes / Podman local artifacts (se aplicável)
+.kube/
+
+# Outros temporários
+*.tmp
+*.swp
