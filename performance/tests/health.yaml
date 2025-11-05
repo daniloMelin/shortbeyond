@@ -1,0 +1,16 @@
+config:
+  target: "http://localhost:3333"
+  phases:
+    - name: "health-check"
+      duration: 30
+      arrivalRate: 5
+
+scenarios:
+  - name: "Health Check"
+    flow:
+      - get:
+          url: "/health"
+          expect:
+            - statusCode: 200
+            - equals: ["shortbeyond-api", "{{ service }}"]
+            - equals: ["healthy", "{{ status }}"]

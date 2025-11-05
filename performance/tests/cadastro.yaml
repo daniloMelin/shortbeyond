@@ -1,0 +1,42 @@
+config:
+  target: "http://localhost:3333/api"
+  phases:
+    - name: "cadastros"
+      duration: 45
+      arrivalRate: 3
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Cadastro com Sucesso"
+    weight: 80
+    flow:
+      - post:
+          url: "/auth/register"
+          json:
+            name: "Usuario {{ $uuid }}"
+            email: "usuario-{{ $uuid }}@load.dev"
+            password: "senha123"
+          expect:
+            - statusCode: 201
+            - hasProperty: "user"
+            - match:
+                json: "$.message"
+                value: "Usuário cadastrado com sucesso!"
+
+  - name: "Email Duplicado"
+    weight: 20
+    flow:
+      - post:
+          url: "/auth/register"
+          json:
+            name: "Usuario Teste"
+            email: "duplicado@load.dev"
+            password: "senha123"
+          expect:
+            - statusCode: 400
+            - hasProperty: "message"
+            - match:
+                json: "$.message"
+                value: "Este e-mail já está em uso. Por favor, tente outro."

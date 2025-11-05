@@ -1,0 +1,107 @@
+config:
+  target: "http://localhost:3333/api"
+  payload:
+    path: "../data/usuarios.csv"
+    fields: ["name", "email", "password"]
+  phases:
+    # Fase 1: Aquecimento - Carga base estável
+    - name: "warmup"
+      duration: 30
+      arrivalRate: 5
+    
+    # Fase 2: Rampa gradual - Preparação para o pico
+    - name: "ramp-up"
+      duration: 20
+      arrivalRate: 5
+      rampTo: 20
+    
+    # Fase 3: PICO - Carga extrema súbita
+    - name: "spike"
+      duration: 30
+      arrivalRate: 100
+    
+    # Fase 4: Queda súbita - Retorno à carga normal
+    - name: "drop"
+      duration: 10
+      arrivalRate: 100
+      rampTo: 10
+    
+    # Fase 5: Recuperação - Observar comportamento pós-pico
+    - name: "recovery"
+      duration: 10
+      arrivalRate: 5
+
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Criar Link"
+    weight: 50
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            json: "$.data.token"
+            as: "authToken"
+          expect:
+            - statusCode: 200
+      - post:
+          url: "/links"
+          json:
+            original_url: "https://instgram.com/papitoqa"
+            title: "Instagram do Papito"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 201
+            - hasProperty: "data.short_url"
+
+  - name: "Listar Links"
+    weight: 30
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            json: "$.data.token"
+            as: "authToken"
+      - get:
+          url: "/links"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+            - hasProperty: "data"
+
+  - name: "Fluxo Completo"
+    weight: 20
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            json: "$.data.token"
+            as: "authToken"
+      - post:
+          url: "/links"
+          json:
+            original_url: "https://instgram.com/papitoqa"
+            title: "Instagram do Papito"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 201
+      - get:
+          url: "/links"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200

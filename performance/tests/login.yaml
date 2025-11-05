@@ -1,0 +1,44 @@
+config:
+  target: "http://localhost:3333/api"
+  payload:
+    path: "../data/usuarios.csv"
+    fields: ["name", "email", "password"]
+    skipHeader: true
+  phases:
+    - name: "login-test"
+      duration: 60
+      arrivalRate: 4
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Login com Sucesso"
+    weight: 70
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          expect:
+            - statusCode: 200
+            - hasProperty: "data.token"
+            - match:
+                json: "$.message"
+                value: "Login realizado com sucesso"
+
+  - name: "Senha Incorreta"
+    weight: 30
+    flow:
+      - post:
+          url: "/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "senha-incorreta"
+          expect:
+            - statusCode: 401
+            - hasProperty: "message"
+            - match:
+                json: "$.message"
+                value: "Credenciais inválidas"
