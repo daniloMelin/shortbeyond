@@ -19,8 +19,8 @@ config:
     - name: "spike"
       duration: 30
       arrivalRate: 100
-    
-    # Fase 4: Queda súbita - Retorno à carga normal
+
+    # Fase 4: Queda graduada - Retorno à carga normal
     - name: "drop"
       duration: 10
       arrivalRate: 100
@@ -58,7 +58,7 @@ scenarios:
             Authorization: "Bearer {{ authToken }}"
           expect:
             - statusCode: 201
-            - hasProperty: "data.short_url"
+            - hasProperty: "data.short_code"
 
   - name: "Listar Links"
     weight: 30

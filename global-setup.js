@@ -1,4 +1,4 @@
-const { cleanupTestData } = require('./playwright/support/cleanup');
+const { cleanupTestData } = require('./playwright/support/database/cleanup');
 
 module.exports = async () => {
   console.log('🧹 Iniciando limpeza de dados de teste antes da execução...');

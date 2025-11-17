@@ -89,6 +89,8 @@ performance/
 ├── data/
 │   └── usuarios.csv
 ├── reports/
+|   ├── analysis/
+|   └── json/
 └── scripts/
 └── run-all-tests.sh
 ```
