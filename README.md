@@ -91,3 +91,10 @@ npm run test:perf:smoke
 # Executar Spike Test (Cenário de Pico)
 npm run test:perf:spike
 ```
+
+---
+
+## 👨‍🏫 Agradecimentos
+
+Projeto desenvolvido sob a mentoria do mestre **Fernando Papito** ([@papitodev](https://github.com/papitodev)) durante os bootcamps da **TestBeyond**.
+Agradeço pelos ensinamentos valiosos sobre arquitetura de testes, boas práticas e performance.
