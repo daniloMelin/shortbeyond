@@ -1,140 +1,93 @@
-# Automação de Testes de API - Projeto ShortBeyond
+# 🚀 Automação de Testes de API & Performance - ShortBeyond
 
-Este repositório contém um projeto de automação de testes de API desenvolvido com **Playwright**. O projeto foi criado como parte do Bootcamp **Playwright Além da Interface** da TestBeyond.
+![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
+![Artillery](https://img.shields.io/badge/Artillery-00d7a0?style=for-the-badge&logo=artillery&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Podman](https://img.shields.io/badge/Podman-892CA0?style=for-the-badge&logo=podman&logoColor=white)
 
-O objetivo é demonstrar as melhores práticas na automação de testes para uma API REST, cobrindo validações de contrato, regras de negócio e fluxos de usuário.
-
----
-
-## 🛠️ <a name="tech-stack"></a> Tecnologias Utilizadas
-
-* **Framework de Testes:** [Playwright](https://playwright.dev/)
-* **Linguagem:** [TypeScript](https://www.typescriptlang.org/) / [JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
-* **Ambiente de Execução:** [Node.js](https://nodejs.org/) (v22.x)
-* **Gerenciador de Pacotes:** [npm](https://www.npmjs.com/)
-* **Ambiente da API:** [Podman](https://podman.io/) (para orquestração de contêineres)
-* **Editor de Código:** [Visual Studio Code](https://code.visualstudio.com/)
+Este repositório contém uma estratégia completa de qualidade para a API **ShortBeyond**, desenvolvida durante os Bootcamps da **TestBeyond**. O projeto vai além do teste funcional, integrando testes de carga para garantir escalabilidade.
 
 ---
 
-## 🚀 Começando
+## 🏗️ 1. Arquitetura de Testes Funcionais (Playwright)
 
-Siga os passos abaixo para configurar seu ambiente de desenvolvimento e executar os testes.
+Para garantir manutenção e escalabilidade, o projeto foge do básico e implementa padrões avançados de engenharia de testes:
 
-### 1. Pré-requisitos: Configuração do Ambiente
-
-Esta seção garante que você tenha todo o ambiente configurado corretamente antes de rodar o projeto. A instalação dessas ferramentas é um pré-requisito fundamental para evitar dores de cabeça.
-
-<details><summary><strong>Clique para expandir o Guia de Instalação de Ferramentas Essenciais</strong></summary>
+* **Service Layer (Camada de Serviços):** Adaptação do padrão *Page Objects* para APIs. Os testes não chamam a API diretamente, mas sim métodos encapsulados (ex: `user.create()`), tornando o código limpo.
+* **Factories & Faker:** Geração dinâmica de massa de dados para evitar conflitos de unicidade (ex: e-mails duplicados).
+* **Custom Fixtures:** Injeção de dependências nativa do Playwright, permitindo instanciar serviços automaticamente nos testes.
+* **Global Setup:** Orquestração do ambiente para garantir que o banco de dados e o token de autenticação estejam prontos antes da execução.
 
 ---
 
-#### 📦 Node.js (v22.19.0)
+## ⚡ 2. Testes de Performance (Artillery)
 
-Base do nosso ambiente de desenvolvimento, acompanhado do **npm** (gerenciador de pacotes).
+Além de funcionar, a API precisa aguentar pressão. Foi realizada uma bateria de testes de performance focada em identificar gargalos.
 
-**📥 Windows:**
+### 📊 Resultados da Análise
 
-* Baixe e instale a partir do site oficial: [Node.js v22.19.0](https://nodejs.org/dist/v22.19.0/node-v22.19.0-x64.msi)
+| Tipo de Teste  | Objetivo               | Cenário                    | Resultado (P95) | Status          |
+| -------------- | ---------------------- | -------------------------- | --------------- | --------------- |
+| **Smoke Test** | Validar saúde da API   | Endpoint `/health`         | **1ms**         | ✅ Aprovado      |
+| **Load Test**  | Simular dia a dia      | Fluxos de Cadastro e Login | **< 70ms**      | ✅ Aprovado      |
+| **Spike Test** | Simular pico repentino | Carga súbita de 100 req/s  | **8000ms**      | 🔴 Falha Crítica |
 
-**🐧 Linux (Ubuntu/Debian) / 🍎 Mac (via NVM):**
+### ⚠️ Insights Críticos: O Caos do Spike Test
+
+Durante o teste de pico (Spike), a aplicação colapsou, revelando vulnerabilidades de infraestrutura:
+
+* **Latência Explosiva:** O tempo de resposta saltou de 70ms para **8 segundos**.
+* **Indisponibilidade:** Foram registrados **106 Timeouts**.
+* **Taxa de Erro:** 7.55% das requisições falharam.
+* **Conclusão Técnica:** O sistema necessita urgentemente de implementação de **Rate Limiting** e otimização de queries no Banco de Dados para suportar picos de tráfego.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Frameworks:** [Playwright](https://playwright.dev/) (Funcional) & [Artillery](https://www.artillery.io/) (Performance)
+* **Linguagem:** TypeScript / JavaScript
+* **Runtime:** Node.js (v22.x)
+* **Infraestrutura:** Podman (Orquestração de contêineres da API)
+
+---
+
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+
+Certifique-se de ter instalado: **Node.js (v22+)**, **Git** e **Podman**.
+
+### 1. Configuração Inicial
 
 ```bash
-# Instalar NVM (Node Version Manager)
-curl -o- [https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh](https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh) | bash
-
-# Importante: Feche e reabra o terminal ou execute o comando abaixo para ativar o NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# Instalar e usar a versão correta do Node.js
-nvm install 22
-nvm use 22
-nvm alias default 22
-```
-
-**🔍 Verificação:**
-
-```bash
-node -v   # Deve retornar: v22.x.x
-npm -v    # Deve retornar: 10.x.x
-```
-
----
-
-#### 🔧 Git e Git Bash
-
-Ferramenta fundamental para controle de versão. No Windows, o **Git Bash** será nossa interface de linha de comando padrão.
-
-**📥 Windows:**
-
-1. Baixe e instale o [Git for Windows](https://gitforwindows.org/).
-2. Durante a instalação, na etapa **“Select Components”**, marque a opção para adicionar o **Git Bash ao perfil do Windows Terminal**.
-3. Mantenha as opções padrão nas demais etapas.
-
-**🐧 Linux (Ubuntu/Debian):**
-
-```bash
-sudo apt update && sudo apt install git -y
-```
-
-**⚙️ Configuração Inicial (todos os sistemas):**
-
-```bash
-git config --global user.name "Seu Nome"
-git config --global user.email "seu.email@exemplo.com"
-```
-
----
-
-#### 📝 Visual Studio Code
-
-Nosso editor de código padrão. Leve, rápido e com um ecossistema de extensões excelente.
-
-* **Download:** [Visual Studio Code](https://code.visualstudio.com/)
-* **Extensões Recomendadas:** Material Icon Theme, One Dark Pro, Prettier - Code formatter.
-
----
-</details>
-
-### 2. Rodando o Projeto
-
-Com o ambiente configurado, siga os passos abaixo no seu terminal.
-
-**1. Clone o repositório:**
-
-```bash
-git clone [https://github.com/seu-usuario/shortbeyond.git](https://github.com/seu-usuario/shortbeyond.git)
+# Clone o repositório
+git clone [https://github.com/daniloMelin/shortbeyond.git](https://github.com/daniloMelin/shortbeyond.git)
 cd shortbeyond
-```
 
-**2. Suba o ambiente da API com Podman:**
-> Este comando utiliza o arquivo `shortbeyond.yaml` para orquestrar e iniciar os contêineres da API que será testada.
+# Instale as dependências
+npm install
 
-```bash
+# Suba o ambiente da API localmente com Podman
 podman play kube shortbeyond.yaml
 ```
 
-**3. Instale as dependências do projeto:**
-> Este comando lê o arquivo `package.json` e baixa todas as bibliotecas necessárias, incluindo o Playwright.
+### 2\. Executando os Testes
 
-```bash
-npm install
-```
-
----
-
-## 🧪 Executando os Testes
-
-**1. Rodar todos os testes de API:**
+**Testes Funcionais (Playwright):**
 
 ```bash
 npx playwright test
 ```
 
-**2. Visualizar o relatório de testes:**
-> Este comando iniciará um servidor web local para que você possa navegar pelo relatório HTML detalhado da última execução.
+*(Para ver o relatório: `npx playwright show-report`)*
+
+**Testes de Performance (Artillery):**
 
 ```bash
-npx playwright show-report
+# Executar Smoke Test
+npm run test:perf:smoke
+
+# Executar Spike Test (Cenário de Pico)
+npm run test:perf:spike
 ```
