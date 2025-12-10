@@ -1,4 +1,4 @@
-# 🚀 Automação de Testes de API & Performance - ShortBeyond
+# Automação de Testes de API & Performance - ShortBeyond
 
 ![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
 ![Artillery](https://img.shields.io/badge/Artillery-00d7a0?style=for-the-badge&logo=artillery&logoColor=white)
